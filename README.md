@@ -20,10 +20,12 @@ npm run preview  # serve the built site locally
 
 ## GitHub Pages
 
-This project is set up as a GitHub user site (`https://<username>.github.io/`).
+This project deploys as a GitHub **project site** at
+[https://vedantpatel04.github.io/Developer-Portfolio-Vedant/](https://vedantpatel04.github.io/Developer-Portfolio-Vedant/).
 
-1. Create a public GitHub repo named `<username>.github.io`.
-2. Push `main` to that repo.
-3. In the repo settings, enable Pages and set the source to **GitHub Actions**.
+1. In the repo settings, enable Pages and set the source to **GitHub Actions**.
+2. Push `main`. The workflow in `.github/workflows/pages.yml` builds a static
+   bundle with base path `/Developer-Portfolio-Vedant/` and deploys it.
 
-The workflow in `.github/workflows/pages.yml` builds on every push to `main` and deploys the static output.
+Local `npm run dev` still serves from `/`. The project base path is applied only
+in CI (`GITHUB_PAGES=true`).

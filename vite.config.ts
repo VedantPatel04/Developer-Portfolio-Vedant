@@ -4,7 +4,12 @@ import viteReact from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
 import tsConfigPaths from "vite-tsconfig-paths";
 
+const pagesBase =
+  process.env.GITHUB_PAGES === "true" ? "/Developer-Portfolio-Vedant/" : "/";
+const routerBasepath = pagesBase.replace(/\/$/, "") || "/";
+
 export default defineConfig({
+  base: pagesBase,
   server: {
     port: 8080,
     host: "127.0.0.1",
@@ -15,6 +20,7 @@ export default defineConfig({
     tanstackStart({
       spa: { enabled: true },
       prerender: { enabled: true, crawlLinks: true, concurrency: 1 },
+      router: { basepath: routerBasepath },
     }),
     viteReact(),
   ],
