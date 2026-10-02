@@ -4,6 +4,10 @@ import { GrainField } from "@/components/GrainField";
 import { RetroTerminal } from "@/components/RetroTerminal";
 
 const clamp = (v: number, min = 0, max = 1) => Math.min(max, Math.max(min, v));
+const smoothstep = (t: number) => {
+  const x = clamp(t);
+  return x * x * (3 - 2 * x);
+};
 
 function useClock() {
   const [time, setTime] = useState("--:--");
@@ -274,6 +278,13 @@ function Index() {
   // Hero image shrinks to 48%, About panel slides in during the last 40%.
   const imageWidth = 100 - 52 * clamp(heroProgress / 0.75);
   const panelProgress = clamp((heroProgress - 0.45) / 0.4);
+  const projectsReveal = smoothstep(projectsProgress);
+  const projectsTitleOpacity =
+    projectsReveal < 0.2
+      ? projectsReveal / 0.2
+      : projectsReveal > 0.82
+        ? (1 - projectsReveal) / 0.18
+        : 1;
 
   return (
     <div id="top" className="relative min-h-screen bg-background text-foreground">
@@ -341,11 +352,14 @@ function Index() {
         </div>
 
         {/* Projects title */}
-        <div ref={projectsTrack} className="relative h-[200vh]" id="projects">
+        <div ref={projectsTrack} className="relative h-[260vh]" id="projects">
           <div className="sticky top-16 flex h-[calc(100vh-4rem)] items-center overflow-hidden">
             <div
               className="projects-title-reveal flex w-full items-center justify-center px-5 md:px-8"
-              style={{ clipPath: `inset(0 ${(1 - projectsProgress) * 100}% 0 0)` }}
+              style={{
+                clipPath: `inset(0 ${(1 - projectsReveal) * 100}% 0 0)`,
+                opacity: projectsTitleOpacity,
+              }}
             >
               <span className="text-center text-[clamp(3rem,18vw,15rem)] font-bold leading-none tracking-[-0.05em]">
                 Projects

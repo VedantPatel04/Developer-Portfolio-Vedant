@@ -51,11 +51,11 @@ void main() {
   );
   vec2 drifted = p + (warp - 0.5) * 0.14;
   float density = mix(0.82, 0.94, fbm(drifted * 2.8 + t * 0.18));
-  vec2 cell = floor(drifted * 320.0);
+  vec2 cell = floor(drifted * 480.0);
   float speck = step(density, hash(cell));
-  float weight = mix(0.22, 0.7, hash(cell + 17.3));
-  vec3 tint = vec3(0.965, 0.93, 0.84);
-  fragColor = vec4(tint, speck * weight * 0.42);
+  float weight = mix(0.12, 0.42, hash(cell + 17.3));
+  vec3 tint = vec3(0.72, 0.76, 0.84);
+  fragColor = vec4(tint, speck * weight * 0.24);
 }
 `;
 
