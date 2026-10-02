@@ -265,7 +265,7 @@
     position: relative;
     z-index: 1;
     width: 100%;
-    max-width: 16ch;
+    max-width: 26ch;
     margin-inline: auto;
     color: oklch(0.4 0.14 255);
     font-family: ui-monospace, "SFMono-Regular", Menlo, Monaco, Consolas, monospace;
@@ -275,6 +275,7 @@
     text-align: center;
     text-shadow: 0 0 0.45rem oklch(0.4 0.14 255 / 0.22);
     overflow-wrap: break-word;
+    white-space: pre-line;
   }
 
   .retro-terminal-prompt {

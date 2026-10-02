@@ -319,17 +319,20 @@ function Index() {
                         key={entry.title}
                         className="grid grid-cols-[2.4ch_1fr] gap-4 border-t border-border py-3 md:py-3.5"
                       >
-                        <span className="label-mono pt-1 font-bold text-muted-foreground">
+                        <span className="label-mono pt-1 font-bold text-foreground/80">
                           {String(index + 1).padStart(2, "0")}
                         </span>
                         <div>
                           <p className="text-lg font-bold uppercase tracking-[-0.03em] md:text-2xl">
                             {entry.title}
                           </p>
-                          <p className="label-mono mt-1.5 flex flex-wrap justify-between gap-2 font-bold text-muted-foreground">
+                          <p className="label-mono mt-1.5 flex flex-wrap justify-between gap-2 font-bold text-foreground/90">
                             <span>{entry.org}</span>
                             <span>{entry.dates}</span>
                           </p>
+                          {"focus" in entry && entry.focus ? (
+                            <p className="label-mono mt-1 font-bold text-foreground/80">{entry.focus}</p>
+                          ) : null}
                         </div>
                       </div>
                     ))}
@@ -410,7 +413,7 @@ function Index() {
                           rel="noreferrer"
                           className="label-mono mt-2 inline-flex text-[0.65rem] font-bold underline underline-offset-4 transition-opacity hover:opacity-70 xl:text-xs"
                         >
-                          Live GitHub
+                          {"linkLabel" in project ? project.linkLabel : "Live GitHub"}
                         </a>
                       ) : null}
                     </div>
@@ -499,11 +502,13 @@ const BACKGROUND_SECTIONS = [
         title: "Software Engineer Intern",
         org: "SciQuel",
         dates: "July 2026 — Sept. 2026",
+        focus: "Full-Stack · Test Infrastructure ",
       },
       {
         title: "STEM Technical Instructor",
         org: "College of the Canyons",
         dates: "Aug. 2023 — Aug. 2024",
+        focus: "Data Structures & Algorithms · Calculus",
       },
     ],
   },
@@ -576,10 +581,11 @@ const PROJECT_TILES = [
     pin: false,
     tone: "navy",
     title: "Webhook Regression",
-    category: "Infra · Reliability",
+    category: "DevOps/SRE · QA",
     description: "A developer platform for testing webhook consumers in local and staging environments",
     stack: "Python · FastAPI · React · AWS · SQS · Supabase",
-    href: undefined,
+    href: "https://github.com/VedantPatel04/HookItAgain",
+    linkLabel: "In Progress",
   },
 ] as const;
 
