@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-const MESSAGE = "Welcome to my (developer) crib 😏😏";
+const MESSAGE = "Welcome to my (developer's) crib 😏😏";
 const CHARS = Array.from(MESSAGE);
 
 export function RetroTerminal() {

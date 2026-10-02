@@ -83,9 +83,9 @@ function smoothScrollTo(hash: string) {
 function CursorFollower() {
   const followerRef = useRef<HTMLDivElement | null>(null);
   const target = useRef({ x: -100, y: -100 });
+  const points = useRef(Array.from({ length: 5 }, () => ({ x: -100, y: -100 })));
   const hidden = useRef(true);
   const raf = useRef(0);
-  const points = useRef(Array.from({ length: 10 }, () => ({ x: -100, y: -100 })));
   const lastTime = useRef(0);
 
   useEffect(() => {
@@ -121,19 +121,13 @@ function CursorFollower() {
       follower.setAttribute("data-hidden", "false");
     };
 
-    const onOver = (e: MouseEvent) => {
-      const targetEl = e.target as HTMLElement | null;
-      const isHoverable =
-        targetEl?.closest("a, button, [role='button'], input, textarea, select") != null;
-      follower.setAttribute("data-hover", String(isHoverable));
-    };
-
     const tick = (timestamp: number) => {
       const delta = lastTime.current ? Math.min(timestamp - lastTime.current, 32) : 16.67;
       lastTime.current = timestamp;
       const nodes = follower.querySelectorAll<HTMLElement>(".cursor-node");
       const frameScale = delta / 16.67;
-      const headEase = 1 - Math.pow(1 - 0.34, frameScale);
+      const headEase = 1 - Math.pow(1 - 0.5, frameScale);
+      const followEase = 1 - Math.pow(1 - 0.55, frameScale);
       const head = points.current[0];
       if (!head) return;
       head.x += (target.current.x - head.x) * headEase;
@@ -143,16 +137,14 @@ function CursorFollower() {
         const point = points.current[index];
         const leader = points.current[index - 1];
         if (!point || !leader) continue;
-        const followEase = 1 - Math.pow(1 - (0.36 - index * 0.012), frameScale);
         point.x += (leader.x - point.x) * followEase;
         point.y += (leader.y - point.y) * followEase;
       }
 
-      const hoverScale = follower.dataset["hover"] === "true" ? 1.18 : 1;
       nodes.forEach((node, index) => {
         const point = points.current[index];
         if (!point) return;
-        node.style.transform = `translate3d(${point.x}px, ${point.y}px, 0) translate(-50%, -50%) scale(${index === 0 ? hoverScale : 1})`;
+        node.style.transform = `translate3d(${point.x}px, ${point.y}px, 0) translate(-50%, -50%)`;
       });
       raf.current = requestAnimationFrame(tick);
     };
@@ -160,21 +152,19 @@ function CursorFollower() {
     document.addEventListener("mousemove", onMove, { passive: true });
     document.addEventListener("mouseleave", onLeave);
     document.addEventListener("mouseenter", onEnter);
-    document.addEventListener("mouseover", onOver, { passive: true });
     raf.current = requestAnimationFrame(tick);
 
     return () => {
       document.removeEventListener("mousemove", onMove);
       document.removeEventListener("mouseleave", onLeave);
       document.removeEventListener("mouseenter", onEnter);
-      document.removeEventListener("mouseover", onOver);
       cancelAnimationFrame(raf.current);
     };
   }, []);
 
   return (
     <div ref={followerRef} className="cursor-follower" data-hidden="true" aria-hidden="true">
-      {Array.from({ length: 10 }, (_, index) => (
+      {Array.from({ length: 5 }, (_, index) => (
         <span
           key={index}
           className={`cursor-node ${index === 0 ? "cursor-head" : "cursor-trail"}`}
@@ -352,7 +342,7 @@ function Index() {
         </div>
 
         {/* Projects title */}
-        <div ref={projectsTrack} className="relative h-[260vh]" id="projects">
+        <div ref={projectsTrack} className="relative h-[370vh]" id="projects">
           <div className="sticky top-16 flex h-[calc(100vh-4rem)] items-center overflow-hidden">
             <div
               className="projects-title-reveal flex w-full items-center justify-center px-5 md:px-8"
@@ -418,9 +408,9 @@ function Index() {
                           href={project.href}
                           target="_blank"
                           rel="noreferrer"
-                          className="label-mono mt-2 inline-flex text-[0.65rem] font-bold transition-opacity hover:opacity-70 xl:text-xs"
+                          className="label-mono mt-2 inline-flex text-[0.65rem] font-bold underline underline-offset-4 transition-opacity hover:opacity-70 xl:text-xs"
                         >
-                          / GitHub
+                          Live GitHub
                         </a>
                       ) : null}
                     </div>

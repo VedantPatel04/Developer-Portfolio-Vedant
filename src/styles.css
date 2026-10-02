@@ -546,7 +546,7 @@
     height: calc(1.65rem - var(--trail-index) * 0.12rem);
     min-width: 0.48rem;
     min-height: 0.48rem;
-    border-radius: 48% 52% 54% 46%;
+    border-radius: 9999px;
     background-color: var(--foreground);
     opacity: calc(1 - var(--trail-index) * 0.085);
     will-change: transform;
